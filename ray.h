@@ -1,20 +1,20 @@
 #ifndef __RAY__
 #define __RAY__
 
-#include "vec3.h"
+#include "globals.h"
 
 class ray
 {
 public:
     ray() {}
-    ray(const vec3f& o, const vec3f& n) : _o(o), _n(n) {}
-    vec3f origin()      const { return _o; }
-    vec3f direction()   const { return _n; }
-    vec3f position(float t) const {return _o + t*_n}
+    ray(const vec3f& o, const vec3f& n) : o(o), n(n) {}
+    vec3f   origin      ()        const { return o; }
+    vec3f&  origin      ()              { return o; }
+    vec3f   direction   ()        const { return n; }
+    vec3f&  direction   ()              { return n; }
+    vec3f   position_at (float t) const { return o + t*n; }
 private:
-    vec3f _o;
-    vec3f _n;
-
+    vec3f o;
+    vec3f n;
 };
-
 #endif

@@ -17,7 +17,7 @@ void to_ppm(uint size_x, uint size_y, rgb* pixels, const char* filename)
         for (int i = 0; i < size_x; ++i)
         {
             rgb& color = pixels[i + j*size_x];
-            ofile << color.r() << " " << color.g() << " " << color.b() << "\n";
+            ofile << color.r << " " << color.g << " " << color.b << "\n";
         }
     }
 
