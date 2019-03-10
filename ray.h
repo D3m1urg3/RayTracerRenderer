@@ -1,7 +1,7 @@
 #ifndef __RAY__
 #define __RAY__
 
-#include "globals.h"
+#include "vec3.h"
 
 class ray
 {
@@ -17,4 +17,5 @@ private:
     vec3f o;
     vec3f n;
 };
+
 #endif

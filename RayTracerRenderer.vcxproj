@@ -120,7 +120,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="to_ppm.cpp" />
-    <ClCompile Include="vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h" />
