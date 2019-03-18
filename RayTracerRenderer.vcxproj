@@ -118,10 +118,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="geometries.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="to_ppm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="geometries.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="vec3.h" />
