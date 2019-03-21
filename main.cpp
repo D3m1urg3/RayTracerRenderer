@@ -1,11 +1,19 @@
 #include "globals.h"
 #include "geometries.h"
+#include "camera.h"
 #include "to_ppm.h"
 #include <cfloat>
+#include <cstdlib>
+#include <time.h>
 
 // Followed https://github.com/petershirley/raytracinginoneweekend Peter's Shirley Raytracer in a Weekend
 
-rgb color(const ray& r, const std::vector<geom*>& world)
+rgb vec3f_to_rgb(const vec3f& v)
+{
+    return rgb{ static_cast<int>(255.99f*v.x()), static_cast<int>(255.99f*v.y()), static_cast<int>(255.99f*v.z()) };
+}
+
+vec3f colorf(const ray& r, const std::vector<geom*>& world)
 {
     hit rec;
     vec3f ret;
@@ -19,32 +27,39 @@ rgb color(const ray& r, const std::vector<geom*>& world)
         float t         = 0.5f*(unit_dir.y() + 1.0f);
         ret = (1.0f - t)*vec3f(1.0f, 1.0f, 1.0f) + t*vec3f(0.5f, 0.7f, 1.0f);
     }
-    return rgb{ int(255.99f*ret.x()), int(255.99f*ret.y()), int(255.99f*ret.z()) };
+    return ret;
 }
 
 int main()
 {
+    srand((unsigned)time(NULL));
+
     const int nx = 200;
     const int ny = 100;
-
-    vec3f lower_left_corner(-2.0f, -1.0f, -1.0f);
-    vec3f horizontal(4.0f, 0.0f, 0.0f);
-    vec3f vertical(0.0f, 2.0f, 0.0f);
-    vec3f origin(0.0f, 0.0f, 0.0f);
+    const int ns = 100;
 
     std::vector<geom*> world;
     world.push_back(new sphere(vec3f(0.0f, 0.0f, -1.0f), 0.5f));
     world.push_back(new sphere(vec3f(0.0f, -100.5f, -1.0f), 100.0f));
 
+    camera cam;
+
     rgb pixels[nx*ny];
     for (int n = 0; n < nx*ny; ++n)
     {
-        float u = float(n % nx) / float(nx);
-        float v = float(n / nx) / float(ny);
-        ray r(origin, lower_left_corner + u*horizontal + v*vertical);
-        pixels[n] = color(r, world);
-    }
+        vec3f colf(0.0f, 0.0f, 0.0f);
+        for (int s = 0; s < ns; ++s)
+        {
+            float u = (static_cast<float>(n%nx) + static_cast<float>(rand()/static_cast<float>(RAND_MAX))) / float(nx);
+            float v = (static_cast<float>(n/nx) + static_cast<float>(rand()/static_cast<float>(RAND_MAX))) / float(ny);
 
+            ray r = cam.shoot_ray(u, v);
+            vec3f p = r.position_at(2.0f);
+            colf += colorf(r, world);
+        }
+        colf /= static_cast<float>(ns);
+        pixels[n] = vec3f_to_rgb(colf);
+    }
     to_ppm(nx, ny, pixels, "out.ppm");
         
     return 0;

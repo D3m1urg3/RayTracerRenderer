@@ -123,6 +123,7 @@
     <ClCompile Include="to_ppm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="geometries.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="ray.h" />
