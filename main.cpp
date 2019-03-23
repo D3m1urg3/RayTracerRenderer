@@ -8,6 +8,21 @@
 
 // Followed https://github.com/petershirley/raytracinginoneweekend Peter's Shirley Raytracer in a Weekend
 
+float random()
+{
+    return static_cast<float>(rand() / static_cast<float>(RAND_MAX));
+}
+
+vec3f random_in_unit_sphere()
+{
+    vec3f p;
+    do
+    {
+        p = 2.0f*vec3f(random(), random(), random()) - vec3f(1.0f, 1.0f, 1.0f);
+    } while (p.squared_length() >= 1.0f);
+    return p;
+}
+
 rgb vec3f_to_rgb(const vec3f& v)
 {
     return rgb{ static_cast<int>(255.99f*v.x()), static_cast<int>(255.99f*v.y()), static_cast<int>(255.99f*v.z()) };
@@ -19,7 +34,8 @@ vec3f colorf(const ray& r, const std::vector<geom*>& world)
     vec3f ret;
     if(closest_hit_with_geoms(world, r, 0.0f, FLT_MAX, rec))
     {
-        ret = 0.5f*vec3f(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
+        vec3f target = rec.pos + rec.normal + random_in_unit_sphere();
+        ret = 0.5f*colorf(ray(rec.pos, target - rec.pos), world);
     }
     else
     {
@@ -50,8 +66,8 @@ int main()
         vec3f colf(0.0f, 0.0f, 0.0f);
         for (int s = 0; s < ns; ++s)
         {
-            float u = (static_cast<float>(n%nx) + static_cast<float>(rand()/static_cast<float>(RAND_MAX))) / float(nx);
-            float v = (static_cast<float>(n/nx) + static_cast<float>(rand()/static_cast<float>(RAND_MAX))) / float(ny);
+            float u = (static_cast<float>(n%nx) + random()) / static_cast<float>(nx);
+            float v = (static_cast<float>(n/nx) + random()) / static_cast<float>(ny);
 
             ray r = cam.shoot_ray(u, v);
             vec3f p = r.position_at(2.0f);

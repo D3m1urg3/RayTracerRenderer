@@ -155,4 +155,5 @@ inline vec3f unit_vec(vec3f v)
 {
     return v / v.length(); 
 }
+
 #endif
