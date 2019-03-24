@@ -120,12 +120,14 @@
   <ItemGroup>
     <ClCompile Include="geometries.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mrandom.cpp" />
     <ClCompile Include="to_ppm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="geometries.h" />
     <ClInclude Include="globals.h" />
+    <ClInclude Include="mramdon.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="vec3.h" />
     <ClInclude Include="to_ppm.h" />

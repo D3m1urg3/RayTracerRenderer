@@ -156,4 +156,9 @@ inline vec3f unit_vec(vec3f v)
     return v / v.length(); 
 }
 
+inline vec3f reflect_vec(const vec3f& v, const vec3f& n)
+{
+    return v - 2.0f*dot(v, n)*n;
+}
+
 #endif

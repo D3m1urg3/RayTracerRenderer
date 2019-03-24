@@ -24,6 +24,9 @@
     <ClCompile Include="geometries.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mrandom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mramdon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
