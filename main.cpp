@@ -32,7 +32,7 @@ vec3f colorf(const ray& r, const std::vector<geom*>& world)
 {
     hit rec;
     vec3f ret;
-    if(closest_hit_with_geoms(world, r, 0.0f, FLT_MAX, rec))
+    if(closest_hit_with_geoms(world, r, 0.001f, FLT_MAX, rec))
     {
         vec3f target = rec.pos + rec.normal + random_in_unit_sphere();
         ret = 0.5f*colorf(ray(rec.pos, target - rec.pos), world);
@@ -74,6 +74,7 @@ int main()
             colf += colorf(r, world);
         }
         colf /= static_cast<float>(ns);
+        colf = vec3f(sqrtf(colf[0]), sqrtf(colf[1]), sqrtf(colf[2]));
         pixels[n] = vec3f_to_rgb(colf);
     }
     to_ppm(nx, ny, pixels, "out.ppm");
