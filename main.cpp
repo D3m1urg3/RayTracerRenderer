@@ -53,10 +53,10 @@ int main()
     const int ns = 100;
 
     std::vector<geom*> world;
-    world.push_back(new sphere(vec3f(0.0f, 0.0f, -1.0f), 0.5f, new lambertian(vec3f(0.8f, 0.3f, 0.3f))));
+    world.push_back(new sphere(vec3f(0.0f, 0.0f, -1.0f), 0.5f, new lambertian(vec3f(0.1f, 0.2f, 0.5f))));
     world.push_back(new sphere(vec3f(0.0f, -100.5f, -1.0f), 100.0f, new lambertian(vec3f(0.8f, 0.8f, 0.0f))));
     world.push_back(new sphere(vec3f(1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3f(0.8f, 0.6f, 0.2f))));
-    world.push_back(new sphere(vec3f(-1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3f(0.8f, 0.8f, 0.8f))));
+    world.push_back(new sphere(vec3f(-1.0f, 0.0f, -1.0f), 0.5f, new dielectric(1.5f)));
 
     camera cam;
 

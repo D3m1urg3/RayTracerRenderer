@@ -21,7 +21,6 @@ class lambertian : public material
 public:
     lambertian(const vec3f& a) : _albedo(a) {}
     bool scatter(const ray& r_in, const hit& rec, vec3f& attenuation, ray& scattered) const;
-
 private:
     vec3f _albedo;
 };
@@ -29,11 +28,27 @@ private:
 class metal : public material
 {
 public:
-    metal(const vec3f& a) : _albedo(a) {}
+    metal(const vec3f& a) : _albedo(a), _fuzz(0.0f) {}
+    metal(const vec3f& a, float f) : _albedo(a) { _fuzz = (f < 1.0f) ? _fuzz = f : _fuzz = 1.0f; }
     bool scatter(const ray& r_in, const hit& rec, vec3f& attenuation, ray& scattered) const;
-
 private:
     vec3f _albedo;
+    float _fuzz;
+};
+
+class dielectric : public material
+{
+public:
+    dielectric(float r) :_refraction_idx(r) {}
+    bool scatter(const ray& r_in, const hit& rec, vec3f& attenuation, ray& scattered) const;
+    inline float schlick_fresnel(float cosine) const
+    {
+        float r0 = (1.0f - _refraction_idx) / (1.0f + _refraction_idx);
+        r0 = r0*r0;
+        return r0 + (1.0f - r0)*powf(1.0f - cosine, 5.0f);
+    }
+private:
+    float _refraction_idx;
 };
 
 //------------------------------------------------------------------------------------------------------

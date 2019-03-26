@@ -16,9 +16,53 @@ bool lambertian::scatter(const ray& r_in, const hit& rec, vec3f& attenuation, ra
 bool metal::scatter(const ray& r_in, const hit& rec, vec3f& attenuation, ray& scattered) const
 {
     vec3f reflected = reflect_vec(unit_vec(r_in.direction()), rec.normal);
-    scattered    = ray(rec.pos, reflected);
+    scattered    = ray(rec.pos, reflected + _fuzz*rnd_vec3f_in_unit_sphere());
     attenuation  = _albedo;
     return (dot(scattered.direction(), rec.normal)) > 0;
+}
+
+bool dielectric::scatter(const ray& r_in, const hit& rec, vec3f& attenuation, ray& scattered) const
+{
+    vec3f outward_normal;
+    vec3f reflected = reflect_vec(r_in.direction(), rec.normal);
+    float ni_over_nt;
+    attenuation = vec3f(1.0f, 1.0f, 1.0f);
+    vec3f refracted;
+    float reflect_prob;
+    float cosine;
+
+    if (dot(r_in.direction(), rec.normal) > 0.0f)
+    {
+        outward_normal  = -rec.normal;
+        ni_over_nt      = _refraction_idx;
+        cosine          = _refraction_idx * dot(r_in.direction(), rec.normal) / r_in.direction().length();
+    }
+    else
+    {
+        outward_normal  = rec.normal;
+        ni_over_nt      = 1.0f / _refraction_idx;
+        cosine          = -dot(r_in.direction(), rec.normal) / r_in.direction().length();
+    }
+
+    if (refract_vec(r_in.direction(), outward_normal, ni_over_nt, refracted))
+    {
+        reflect_prob = schlick_fresnel(cosine);
+    }
+    else
+    {
+        reflect_prob = 1.0f;
+    }
+
+    if (rnd_uniform() < reflect_prob)
+    {
+        scattered = ray(rec.pos, reflected);
+    }
+    else
+    {
+        scattered = ray(rec.pos, refracted);
+    }
+
+    return true;
 }
 //------------------------------------------------------------------------------------------------------
 // Geometries

@@ -161,4 +161,20 @@ inline vec3f reflect_vec(const vec3f& v, const vec3f& n)
     return v - 2.0f*dot(v, n)*n;
 }
 
+inline bool refract_vec(const vec3f& v, const vec3f& n, float ni_over_nt, vec3f& refracted)
+{
+    bool is_refracted = false;
+    vec3f unit_v      = unit_vec(v);
+    float dt          = dot(unit_v, n);
+
+    float discriminant = 1.0f - ni_over_nt*ni_over_nt*(1.0f - dt*dt);
+    if (discriminant > 0.0f)
+    {
+        refracted       = ni_over_nt*(unit_v - n*dt) - n*sqrtf(discriminant);
+        is_refracted    = true;
+    }
+
+    return is_refracted;
+}
+
 #endif
