@@ -2,6 +2,7 @@
 #define __VECTOR3__
 
 #include <iostream>
+#include "globals.h"
 
 class vec3f
 {

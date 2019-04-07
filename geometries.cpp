@@ -1,3 +1,4 @@
+#include "globals.h"
 #include "geometries.h"
 #include "ray.h"
 #include "mramdon.h"

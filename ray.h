@@ -1,6 +1,7 @@
 #ifndef __RAY__
 #define __RAY__
 
+#include "globals.h"
 #include "vec3.h"
 
 class ray

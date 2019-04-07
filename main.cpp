@@ -6,10 +6,6 @@
 #include <cfloat>
 #include <time.h>
 
-namespace {
-    uint MAX_RAY_DEPTH = 50;
-}
-
 // Followed https://github.com/petershirley/raytracinginoneweekend Peter's Shirley Raytracer in a Weekend
 
 rgb vec3f_to_rgb(const vec3f& v)
@@ -53,12 +49,11 @@ int main()
     const int ns = 100;
 
     std::vector<geom*> world;
-    world.push_back(new sphere(vec3f(0.0f, 0.0f, -1.0f), 0.5f, new lambertian(vec3f(0.1f, 0.2f, 0.5f))));
-    world.push_back(new sphere(vec3f(0.0f, -100.5f, -1.0f), 100.0f, new lambertian(vec3f(0.8f, 0.8f, 0.0f))));
-    world.push_back(new sphere(vec3f(1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3f(0.8f, 0.6f, 0.2f))));
-    world.push_back(new sphere(vec3f(-1.0f, 0.0f, -1.0f), 0.5f, new dielectric(1.5f)));
+    float radius = cos(M_PI / 4.0f);
+    world.push_back(new sphere(vec3f(-radius, 0.0f, -1.0f), radius, new lambertian(vec3f(0.0f, 0.0f, 1.0f))));
+    world.push_back(new sphere(vec3f(radius, 0.0f, -1.0f), radius, new lambertian(vec3f(1.0f, 0.0f, 0.0f))));
 
-    camera cam;
+    camera cam(90.0f, (float)nx/ny);
 
     rgb pixels[nx*ny];
     for (int n = 0; n < nx*ny; ++n)

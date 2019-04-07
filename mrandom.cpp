@@ -1,6 +1,7 @@
-#include "mramdon.h"
+#include "globals.h"
 #include <cstdlib>
 #include <time.h>
+#include "mramdon.h"
 #include "vec3.h"
 
 float rnd_uniform()

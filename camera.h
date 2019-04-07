@@ -1,7 +1,9 @@
 #ifndef __CAMERA__
 #define __CAMERA__
 
+#include "globals.h"
 #include "ray.h"
+
 
 class camera
 {
@@ -11,6 +13,18 @@ public:
         _lower_left_corner = vec3f(-2.0f, -1.0f, -1.0f);
         _horizontal        = vec3f(4.0f, 0.0f, 0.0f);
         _vertical          = vec3f(0.0f, 2.0f, 0.0f);
+        _origin            = vec3f(0.0f, 0.0f, 0.0f);
+    }
+
+    camera(float vfov, float aspect) 
+    {
+        // vfov: vertical camera opening angle in deg
+        float theta = vfov*M_PI / 180.0f;
+        float half_height = tan(theta / 2.0f);
+        float half_width = aspect * half_height;
+        _lower_left_corner = vec3f(-half_width, -half_height, -1.0f);
+        _horizontal        = vec3f(2.0f*half_width, 0.0f, 0.0f);
+        _vertical          = vec3f(0.0f, 2.0f*half_height, 0.0f);
         _origin            = vec3f(0.0f, 0.0f, 0.0f);
     }
 

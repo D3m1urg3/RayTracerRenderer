@@ -1,3 +1,4 @@
+#include "globals.h"
 #include "to_ppm.h"
 
 void to_ppm(uint size_x, uint size_y, rgb* pixels, const char* filename)
