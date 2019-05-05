@@ -49,11 +49,13 @@ int main()
     const int ns = 100;
 
     std::vector<geom*> world;
-    float radius = cos(M_PI / 4.0f);
-    world.push_back(new sphere(vec3f(-radius, 0.0f, -1.0f), radius, new lambertian(vec3f(0.0f, 0.0f, 1.0f))));
-    world.push_back(new sphere(vec3f(radius, 0.0f, -1.0f), radius, new lambertian(vec3f(1.0f, 0.0f, 0.0f))));
+    world.push_back(new sphere(vec3f(0.0f, 0.0f, -1.0f), 0.5f, new lambertian(vec3f(0.1f, 0.2f, 0.5f))));
+    world.push_back(new sphere(vec3f(0.0f, -100.5f, -1.0f), 100.0f, new lambertian(vec3f(0.8f, 0.8f, 0.0f))));
+    world.push_back(new sphere(vec3f(1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3f(0.8f, 0.6f, 0.2f))));
+    world.push_back(new sphere(vec3f(-1.0f, 0.0f, -1.0f), 0.5f, new dielectric(1.5f)));
 
-    camera cam(90.0f, (float)nx/ny);
+    camera cam(vec3f(-2.0f, 2.0f, 1.0f), vec3f(0.0f, 0.0f, -1.0f),vec3f(0.0f, 1.0f, 0.0f), 90.0f, (float)nx/(float)ny);
+    // camera cam(90.0f, (float)nx/(float)ny);
 
     rgb pixels[nx*ny];
     for (int n = 0; n < nx*ny; ++n)
