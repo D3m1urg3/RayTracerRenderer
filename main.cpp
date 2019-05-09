@@ -54,8 +54,14 @@ int main()
     world.push_back(new sphere(vec3f(1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3f(0.8f, 0.6f, 0.2f))));
     world.push_back(new sphere(vec3f(-1.0f, 0.0f, -1.0f), 0.5f, new dielectric(1.5f)));
 
-    camera cam(vec3f(-2.0f, 2.0f, 1.0f), vec3f(0.0f, 0.0f, -1.0f),vec3f(0.0f, 1.0f, 0.0f), 90.0f, (float)nx/(float)ny);
+    // camera cam(vec3f(-2.0f, 2.0f, 1.0f), vec3f(0.0f, 0.0f, -1.0f),vec3f(0.0f, 1.0f, 0.0f), 90.0f, (float)nx/(float)ny);
     // camera cam(90.0f, (float)nx/(float)ny);
+
+    vec3f lookfrom(3.0f, 3.0f, 2.0f);
+    vec3f lookat(0.0f, 0.0f, -1.0f);
+    float dist_to_focus = (lookfrom - lookat).length();
+    float aperture = 2.0f;
+    camera cam(lookfrom, lookat, vec3f(0.0f, 1.0f, 0.0f), 20.0f, (float)nx/(float)ny, aperture, dist_to_focus);
 
     rgb pixels[nx*ny];
     for (int n = 0; n < nx*ny; ++n)
