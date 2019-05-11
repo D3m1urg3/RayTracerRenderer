@@ -40,30 +40,72 @@ vec3f colorf(const ray& r, const std::vector<geom*>& world, uint depth)
     return ret;
 }
 
+std::vector<geom*> random_scene()
+{
+    int n = 500;
+    std::vector<geom*> world;
+
+    world.push_back(new sphere(vec3f(0.0f, -1000.0f, 0.0f), 1000.0f, new lambertian(vec3f(0.5f, 0.5f, 0.5f))));
+    for (int a = -11; a < 11; a++)
+    {
+        for (int b = -11; b < 11; b++)
+        { 
+            float choose_mat = rnd_uniform();
+            vec3f center(a + 0.9f*rnd_uniform(), 0.2f, b + 0.9f*rnd_uniform());
+            if ((center-vec3f(4.0f,0.2f,0.0f)).length() > 0.9f)
+            {
+                if (choose_mat < 0.8f) // diffuse
+                {
+                    world.push_back(new sphere(center, 0.2f, 
+                        new lambertian(vec3f(rnd_uniform()*rnd_uniform(), rnd_uniform()*rnd_uniform(), rnd_uniform()*rnd_uniform()))));
+                }
+                else if (choose_mat < 0.95) // metal
+                {
+                    world.push_back(new sphere(center, 0.2f,
+                        new metal(vec3f(0.5f*(1.0f + rnd_uniform()), 0.5f*(1.0f + rnd_uniform()), 0.5f*(1.0f + rnd_uniform())), 0.5f*rnd_uniform())));
+                }
+                else // glass
+                {
+                    world.push_back(new sphere(center, 0.2f, new dielectric(1.5f)));
+                }
+            }
+        }
+    }
+
+    world.push_back(new sphere(vec3f(0.0f, 1.0f, 0.0f), 1.0f, new dielectric(1.5f)));
+    world.push_back(new sphere(vec3f(-4.0f, 1.0f, 0.0f), 1.0f, new lambertian(vec3f(0.4f, 0.2f, 0.1f))));
+    world.push_back(new sphere(vec3f(4.0f, 1.0f, 0.0f), 1.0f, new metal(vec3f(0.7f, 0.6f, 0.5f), 0.0f)));
+
+    return world;
+}
+
 int main()
 {
     srand((unsigned)time(NULL));
 
-    const int nx = 200;
-    const int ny = 100;
-    const int ns = 100;
+    const int nx = 1200;
+    const int ny = 800;
+    const int ns = 10;
 
-    std::vector<geom*> world;
+    std::cout << "Generating scene ..." << std::endl;
+    std::vector<geom*> world = random_scene();
     world.push_back(new sphere(vec3f(0.0f, 0.0f, -1.0f), 0.5f, new lambertian(vec3f(0.1f, 0.2f, 0.5f))));
     world.push_back(new sphere(vec3f(0.0f, -100.5f, -1.0f), 100.0f, new lambertian(vec3f(0.8f, 0.8f, 0.0f))));
     world.push_back(new sphere(vec3f(1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3f(0.8f, 0.6f, 0.2f))));
     world.push_back(new sphere(vec3f(-1.0f, 0.0f, -1.0f), 0.5f, new dielectric(1.5f)));
+    world.push_back(new sphere(vec3f(-1.0f, 0.0f, -1.0f), -0.45f, new dielectric(1.5f)));
+    std::cout << "... done." << std::endl;
 
-    // camera cam(vec3f(-2.0f, 2.0f, 1.0f), vec3f(0.0f, 0.0f, -1.0f),vec3f(0.0f, 1.0f, 0.0f), 90.0f, (float)nx/(float)ny);
-    // camera cam(90.0f, (float)nx/(float)ny);
-
-    vec3f lookfrom(3.0f, 3.0f, 2.0f);
-    vec3f lookat(0.0f, 0.0f, -1.0f);
-    float dist_to_focus = (lookfrom - lookat).length();
-    float aperture = 2.0f;
+    std::cout << "Setting camera ..." << std::endl;
+    vec3f lookfrom(13.0f, 2.0f, 3.0f);
+    vec3f lookat(0.0f, 0.0f, 0.0f);
+    float dist_to_focus = 10.0f;
+    float aperture = 0.1f;
     camera cam(lookfrom, lookat, vec3f(0.0f, 1.0f, 0.0f), 20.0f, (float)nx/(float)ny, aperture, dist_to_focus);
+    std::cout << "... done." << std::endl;
 
-    rgb pixels[nx*ny];
+    std::cout << "Raytracing ..." << std::endl;
+    std::ofstream ofile("out.ppm");
     for (int n = 0; n < nx*ny; ++n)
     {
         vec3f colf(0.0f, 0.0f, 0.0f);
@@ -78,9 +120,17 @@ int main()
         }
         colf /= static_cast<float>(ns);
         colf = vec3f(sqrtf(colf[0]), sqrtf(colf[1]), sqrtf(colf[2]));
-        pixels[n] = vec3f_to_rgb(colf);
+        rgb col = vec3f_to_rgb(colf);
+
+        ofile << col.r << " " << col.g << " " << col.b << "\n";
+
+        if (n%1000 == 0)
+        {
+            std::cout << "... " << n << "/" << nx*ny << " ..." << std::endl;
+        }
     }
-    to_ppm(nx, ny, pixels, "out.ppm");
+    std::cout << "... done." << std::endl;
+    ofile.close();
         
     while(world.size())
     {
