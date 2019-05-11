@@ -1,10 +1,10 @@
 #include "globals.h"
 #include "geometries.h"
 #include "camera.h"
-#include "to_ppm.h"
 #include "mramdon.h"
 #include <cfloat>
 #include <time.h>
+#include <fstream>
 
 // Followed https://github.com/petershirley/raytracinginoneweekend Peter's Shirley Raytracer in a Weekend
 
@@ -106,6 +106,7 @@ int main()
 
     std::cout << "Raytracing ..." << std::endl;
     std::ofstream ofile("out.ppm");
+    ofile << "P3\n" << nx << " " << ny << "\n255\n";
     for (int n = 0; n < nx*ny; ++n)
     {
         vec3f colf(0.0f, 0.0f, 0.0f);

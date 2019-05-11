@@ -121,7 +121,6 @@
     <ClCompile Include="geometries.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mrandom.cpp" />
-    <ClCompile Include="to_ppm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />

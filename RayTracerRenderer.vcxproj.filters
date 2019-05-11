@@ -18,9 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="to_ppm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="geometries.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
